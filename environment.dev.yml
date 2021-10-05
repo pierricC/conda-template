@@ -1,5 +1,5 @@
 # Do not: include runtime dependencies in this spec
-name: vx-lyo-dt
+name: pytorch-env
 channels:
   - defaults
   - conda-forge
