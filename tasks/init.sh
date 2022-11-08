@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+# ====================================================================
+# Running this script will:
+# 1. Install VS Code's Python extension.
+# 2. Install conda for the current user, if not already installed.
+# 3. Update conda to the latest version.
+# 4. Create the conda environment specified by the union of environment.run.yml and environment.dev.yml.
+# 5. Install pre-commit hooks and configure git.
+#
+# Usage: ./init.sh env_name
+# ======================================================================
+
+DEFAULT_NAME="ml-project"
+ENV_NAME="${1:-$DEFAULT_NAME}"
+
 function log {
     local PURPLE='\033[0;35m'
     local NOCOLOR='\033[m'
@@ -53,7 +67,7 @@ function create_conda_env {
     log "Creating conda environment...\\n\\n"
     pip install --quiet conda-merge
     conda-merge environment.run.yml environment.dev.yml > environment.yml
-    mamba env create --force
+    mamba env create -n ${ENV_NAME} --force
     rm environment.yml
     log "Done!\\n"
 }
@@ -61,7 +75,7 @@ function create_conda_env {
 function configure_git {
     log "Installing pre-commit hooks...\\n"
     # shellcheck disable=SC1091
-    source activate vx-lyo-dt
+    source activate ${ENV_NAME}
     pre-commit install --hook-type pre-commit
     pre-commit install --hook-type prepare-commit-msg
     pre-commit install --hook-type pre-push
@@ -76,11 +90,11 @@ function configure_git {
 function install_jupyter_widgets {
     log "Installing Jupyter widgets...\\n"
     # install npm if needed
-    curl -fsSL https://deb.nodesource.com/setup_15.x | sudo -E bash -m
+    curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -m
     sudo apt-get install -y nodejs
 
     # shellcheck disable=SC1091
-    source activate vx-lyo-dt
+    source activate ${ENV_NAME}
     jupyter nbextension enable --py widgetsnbextension
     jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-matplotlib @jupyterlab/toc 
     conda deactivate
@@ -92,7 +106,7 @@ function run_command {
     case $COMMAND in
     help|--help)
         cat << EOF
-Usage: ./init.sh
+Usage: ./init.sh <envName>
 
 Running this script will:
 

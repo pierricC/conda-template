@@ -1,24 +1,12 @@
-name: pytorch-env
 channels:
   - defaults
   - conda-forge
-  - pytorch
 dependencies:
-  - cryptography~=3.4.4
   - ipython~=7.21.0
   - ipympl~=0.6.3
   - ipywidgets~=7.6.3
   - jupyterlab<3.0
-  - numpy~=1.20.1
   - pandas~=1.2.2
   - python~=3.8
-  - pytorch~=1.7.1
-  - torchvision~=0.8.2
-  - tqdm~=4.58.0
-  - xlrd~=1.2.0
   - pip:
-      - scikit-learn==0.23.1
-      - missingno==0.4.
-      - seaborn==0.11.1
       - pyyaml>=5.3.1
-      - scipy==1.6.2
